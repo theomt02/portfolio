@@ -1,5 +1,5 @@
 // React
-import { useState, useEffect } from "react";
+import { useState } from "react";
 // Router
 import { Routes, Route } from "react-router-dom";
 // Style
@@ -9,13 +9,14 @@ import { light } from "./style/Theme";
 
 // Components
 import Header from "./components/Header";
+import Footer from "./components/Footer";
 // Pages
 import Home from "./pages/Home";
 import Contact from "./pages/Contact";
 import Coffee from "./pages/Coffee";
 import About from "./pages/About";
 import Projects from "./pages/Projects";
-import Footer from "./components/Footer";
+import Photography from "./pages/Photography";
 
 function App() {
   // Set default theme & init state
@@ -28,21 +29,23 @@ function App() {
   return (
     <ThemeProvider theme={currentTheme.color}>
       <AppS>
-        <GlobalStyles />
-        <Header
-          setCurrentTheme={setCurrentTheme}
-          currentTheme={currentTheme}
-          setCurrentDate={setCurrentDate}
-          currentDate={currentDate}
-        />
-        <Routes>
-          <Route path="/" element={<Home date={currentDate} />} />
-          <Route path="about" element={<About />} />
-          <Route path="coffee" element={<Coffee />} />
-          <Route path="projects" element={<Projects />} />
-          <Route path="contact" element={<Contact />} />
-        </Routes>
-        <Footer />
+        <RELATIVE>
+          <GlobalStyles />
+          <Header
+            setCurrentTheme={setCurrentTheme}
+            currentTheme={currentTheme}
+            setCurrentDate={setCurrentDate}
+            currentDate={currentDate}
+          />
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="about" element={<About />} />
+            <Route path="projects" element={<Projects />} />
+            <Route path="contact" element={<Contact />} />
+            <Route path="photography" element={<Photography />} />
+          </Routes>
+          <Footer />
+        </RELATIVE>
       </AppS>
     </ThemeProvider>
   );
@@ -56,4 +59,11 @@ const AppS = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: space-between;
+`;
+
+const RELATIVE = styled.div`
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
 `;

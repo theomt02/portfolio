@@ -13,6 +13,10 @@ export const GlobalStyles = createGlobalStyle`
     background: ${(props) => props.theme.primary};
     color: ${(props) => props.theme.text};
     transition: background 500ms;
+
+    font-family: 'Averia Serif Libre', cursive;
+    font-weight: 400;
+    /* overflow-x: hidden; */
   }
   small {
     display: flex;

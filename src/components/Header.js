@@ -5,6 +5,7 @@ import { light, dark } from "../style/Theme";
 // import Clock from "../components/Clock";
 import Clock from "react-live-clock";
 import "../style/DarkMode.scss";
+import { Link } from "react-router-dom";
 
 const Header = ({
   setCurrentTheme,
@@ -38,7 +39,7 @@ const Header = ({
 
   return (
     <HEADER>
-      <div className="flex">
+      <FLEX>
         <small>
           <Clock
             format="ddd HH:mm"
@@ -50,29 +51,37 @@ const Header = ({
             }}
           />
         </small>
-      </div>
-      <div className="flex">
+      </FLEX>
+      <FLEX>
+        <LinkNoUL to="/">
+          <h1>TMT</h1>
+        </LinkNoUL>
+      </FLEX>
+      <FLEX>
         <ThemeToggle
           onClick={handleDarkMode}
           id="toggle"
           className="toggle"
           type="checkbox"
         ></ThemeToggle>
-      </div>
+      </FLEX>
     </HEADER>
   );
 };
 
 export default Header;
 
+const FLEX = styled.div`
+  display: flex;
+`;
 const HEADER = styled.header`
   width: 100%;
-  height: 32px;
+  height: 5vh;
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 1vw 24vw;
-  margin: var(--space-large) 0;
+  margin: 0 0;
 `;
 
 const ThemeToggle = styled.input`
@@ -88,4 +97,12 @@ const ThemeToggle = styled.input`
   transition: all 0.75s cubic-bezier(0.68, -0.55, 0.265, 1.55);
   transform: rotate(-1turn);
   outline: none;
+`;
+const LinkNoUL = styled(Link)`
+  text-decoration: none;
+  :hover {
+    color: transparent;
+    text-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+  }
+  transition: all 0.2s ease;
 `;
