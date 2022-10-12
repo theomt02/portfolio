@@ -1,19 +1,32 @@
-import React, { useEffect } from "react";
+import React, { useState, useEffect } from "react";
 // Router
 import { Link } from "react-router-dom";
 // Style
 import styled from "styled-components";
 import { Page, ContentWrapper } from "../style/Defaults";
-import { motion, useScroll } from "framer-motion";
+import { motion } from "framer-motion";
 // Components
 import Overlay from "../components/Overlay";
 import { useTheme } from "styled-components";
 import { initialLoadTransition } from "../style/Theme";
 import Spanned from "../components/Spanned";
+// Three
+// import TestCanvas from "../components/TestCanvas.js";
 
 const Home = () => {
   const theme = useTheme();
-  const { scrollYProgress } = useScroll();
+  const [initialLoadDelay, setInitialLoadDelay] = useState(
+    initialLoadTransition.delay
+  );
+  const [spannedIsVisible, setSpannedIsVisible] = useState(true);
+
+  useEffect(() => {
+    if (initialLoadDelay === initialLoadTransition.delay) {
+      setTimeout(() => {
+        setInitialLoadDelay(0);
+      }, initialLoadTransition.delay * 1000);
+    }
+  }, [initialLoadDelay]);
 
   const mainH1Variants = {
     hidden: {
@@ -22,8 +35,46 @@ const Home = () => {
     },
     visible: {
       color: theme.text,
-      transition: initialLoadTransition,
+      transition: {
+        duration: initialLoadTransition.duration,
+        delay: initialLoadDelay,
+      },
       textShadow: "4px 4px 1px #ff0000",
+    },
+  };
+  const whileLinkHover = {
+    scale: 1.08,
+    transition: {
+      duration: 0.1,
+      ease: "easeIn",
+    },
+  };
+
+  const whileSpannedVisible = {
+    scale: 1.14,
+    transition: {
+      duration: 0.2,
+      ease: "easeIn",
+    },
+  };
+
+  const listVariants = {
+    hidden: { x: -200, opacity: 0 },
+    show: {
+      x: 0,
+      opacity: 1,
+    },
+  };
+
+  const ULVariants = {
+    hidden: { opacity: 0 },
+    show: {
+      opacity: 1,
+      transition: {
+        delayChildren: 1,
+        duration: initialLoadTransition.duration,
+        staggerChildren: 0.2,
+      },
     },
   };
   return (
@@ -36,26 +87,48 @@ const Home = () => {
           animate="visible"
           variants={mainH1Variants}
         >
-          <Spanned height={-20} duration={0.3}></Spanned>
+          <Spanned
+            height={-20}
+            duration={0.3}
+            isVisible={spannedIsVisible}
+          ></Spanned>
         </MainH1>
 
         <ContentWrapper>
           <Section>
-            <UL>
-              <li>
-                <Link to="about">About</Link>
-              </li>
-              <li>
-                <Link to="projects">Projects</Link>
-              </li>
-              <li>
-                <Link to="photography">Photography</Link>
-              </li>
-              <li>
-                <Link to="contact">Contact</Link>
-              </li>
+            <UL variants={ULVariants} initial="hidden" animate="show">
+              <motion.li variants={listVariants}>
+                <Link to="about">
+                  <motion.h3 whileHover={whileLinkHover}>About</motion.h3>
+                </Link>
+              </motion.li>
+              <motion.li variants={listVariants}>
+                <ProjectsLinkContainer
+                  active={spannedIsVisible.toString()}
+                  onClick={() => setSpannedIsVisible(!spannedIsVisible)}
+                  initial={{ scale: 1 }}
+                  animate={spannedIsVisible ? { scale: 1 } : { scale: 1.12 }}
+                  whileHover={
+                    spannedIsVisible ? whileLinkHover : whileSpannedVisible
+                  }
+                >
+                  <ProjectsLink>Projects</ProjectsLink>
+                  {spannedIsVisible ? null : <LINK_BACKGROUND />}
+                </ProjectsLinkContainer>
+              </motion.li>
+              <motion.li variants={listVariants}>
+                <Link to="photography">
+                  <motion.h3 whileHover={whileLinkHover}>Photography</motion.h3>
+                </Link>
+              </motion.li>
+              <motion.li variants={listVariants}>
+                <Link to="contact">
+                  <motion.h3 whileHover={whileLinkHover}>Contact</motion.h3>
+                </Link>
+              </motion.li>
             </UL>
           </Section>
+          {/* <TestCanvas /> */}
         </ContentWrapper>
       </Page>
       <SPACE />
@@ -75,22 +148,44 @@ const Section = styled.section`
   }
   li {
     display: inline-block;
-    a {
-      font-size: 2rem;
+    h3 {
+      font-size: 2.2rem;
+      text-decoration: underline;
+      cursor: pointer;
     }
   }
 `;
-const UL = styled.ul`
+const UL = styled(motion.ul)`
   width: 100%;
   list-style: square;
   margin: var(--space-small) 0 0 var(--space-xsmall);
 `;
 
 const MainH1 = styled(motion.h1)`
+  cursor: default;
   position: relative;
-  font-size: 8rem;
+  font-size: 14vh;
   z-index: 2;
 `;
 const SPACE = styled.div`
   height: 100vh;
+`;
+const ProjectsLink = styled(motion.h3)`
+  position: relative;
+  z-index: 2;
+`;
+const LINK_BACKGROUND = styled(motion.span)`
+  position: absolute;
+  top: -12.5%;
+  left: -25%;
+  width: 150%;
+  height: 130%;
+  border-radius: 15px;
+  background: red;
+  z-index: 0;
+  display: block;
+`;
+
+const ProjectsLinkContainer = styled(motion.div)`
+  position: relative;
 `;

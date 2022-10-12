@@ -1,11 +1,12 @@
 import React from "react";
+import { Link } from "react-router-dom";
+// Style
 import styled from "styled-components";
 import { light, dark } from "../style/Theme";
-// Components
-// import Clock from "../components/Clock";
-import Clock from "react-live-clock";
 import "../style/DarkMode.scss";
-import { Link } from "react-router-dom";
+import { motion } from "framer-motion";
+// Components
+import Clock from "react-live-clock";
 
 const Header = ({
   setCurrentTheme,
@@ -37,9 +38,29 @@ const Header = ({
     // }
   };
 
+  const headerVariants = {
+    show: {
+      transition: {
+        ease: "easeIn",
+        duration: 0.3,
+        staggerChildren: 0.05,
+        delayChildren: 1.5,
+      },
+    },
+  };
+
+  const flexVariants = {
+    hidden: {
+      opacity: 0,
+    },
+    show: {
+      opacity: 1,
+    },
+  };
+
   return (
-    <HEADER>
-      <FLEX>
+    <HEADER variants={headerVariants} animate="show" initial="hidden">
+      <FLEX variants={flexVariants}>
         <small>
           <Clock
             format="ddd HH:mm"
@@ -52,12 +73,12 @@ const Header = ({
           />
         </small>
       </FLEX>
-      <FLEX>
+      <LOGO variants={flexVariants}>
         <LinkNoUL to="/">
           <h1>TMT</h1>
         </LinkNoUL>
-      </FLEX>
-      <FLEX>
+      </LOGO>
+      <FLEX variants={flexVariants}>
         <ThemeToggle
           onClick={handleDarkMode}
           id="toggle"
@@ -71,10 +92,18 @@ const Header = ({
 
 export default Header;
 
-const FLEX = styled.div`
+const FLEX = styled(motion.div)`
   display: flex;
+  justify-content: center;
+  /* width: 20vw; */
 `;
-const HEADER = styled.header`
+const LOGO = styled(motion.div)`
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+`;
+const HEADER = styled(motion.header)`
+  position: relative;
   width: 100%;
   height: 5vh;
   display: flex;

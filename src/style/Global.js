@@ -28,9 +28,9 @@ export const GlobalStyles = createGlobalStyle`
   }
   a {
     color: ${(props) => props.theme.text};
-    &:hover {
-      font-weight: bolder;
-      color: white;
-    }
   }
+  svg {
+    display: none;
+  }
+
   `;

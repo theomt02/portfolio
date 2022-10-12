@@ -4,8 +4,15 @@ import { motion } from "framer-motion";
 import { initialLoadTransition } from "../style/Theme";
 
 const Overlay = () => {
+  const overlayAnimate = {
+    y: "-105vh",
+  };
   return (
-    <OVERLAY animate={{ y: "-100%" }} transition={initialLoadTransition}>
+    <OVERLAY
+      animate={overlayAnimate}
+      transition={initialLoadTransition}
+      exit={{ y: "105vh" }}
+    >
       <span></span>
     </OVERLAY>
   );
