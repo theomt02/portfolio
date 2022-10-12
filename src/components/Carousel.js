@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { wrap } from "popmotion";
 import { projects as images } from "../data";
@@ -37,7 +37,6 @@ const swipePower = (offset, velocity) => {
   return Math.abs(offset) * velocity;
 };
 export const Carousel = () => {
-  const navigate = useNavigate();
   const [[page, direction], setPage] = useState([0, 0]);
 
   // We only have 3 images, but we paginate them absolutely (ie 1, 2, 3, 4, 5...) and

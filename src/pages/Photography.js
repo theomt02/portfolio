@@ -22,14 +22,14 @@ const Photography = () => {
   const { scrollYProgress } = useScroll();
 
   useEffect(() => {
-    return scrollYProgress.onChange((latest) => {
+    return scrollYProgress.onChange(() => {
       console.log(scrollYProgress);
       if (scrollYProgress.current > 0.05) {
         setVisible(true);
         console.log(scrollYProgress);
       } else setVisible(false);
     });
-  }, []);
+  }, [scrollYProgress]);
 
   useEffect(() => {
     let imagesPre = imagesRaw.map((img) => {
