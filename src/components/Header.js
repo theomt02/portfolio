@@ -7,6 +7,7 @@ import "../style/DarkMode.scss";
 import { motion } from "framer-motion";
 // Components
 import Clock from "react-live-clock";
+import { device } from "../style/Defaults";
 
 const Header = ({
   setCurrentTheme,
@@ -61,7 +62,7 @@ const Header = ({
   return (
     <HEADER variants={headerVariants} animate="show" initial="hidden">
       <FLEX variants={flexVariants}>
-        <small>
+        <SMALL_DESKTOP>
           <Clock
             format="ddd HH:mm"
             timezone={"Pacific/Auckland"}
@@ -71,7 +72,17 @@ const Header = ({
               dateFormat(date);
             }}
           />
-        </small>
+        </SMALL_DESKTOP>
+        <SMALL_MOBILE>
+          <Clock
+            format="ddd HH:mm"
+            timezone={"Pacific/Auckland"}
+            ticking={true}
+            onChange={(date) => {
+              dateFormat(date);
+            }}
+          />
+        </SMALL_MOBILE>
       </FLEX>
       <LOGO variants={flexVariants}>
         <LinkNoUL to="/">
@@ -105,12 +116,14 @@ const LOGO = styled(motion.div)`
 const HEADER = styled(motion.header)`
   position: relative;
   width: 100%;
-  height: 5vh;
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 1vw 24vw;
   margin: 0 0;
+  @media ${device.tablet} {
+    padding: 2vh 2vh;
+  }
 `;
 
 const ThemeToggle = styled.input`
@@ -134,4 +147,18 @@ const LinkNoUL = styled(Link)`
     text-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
   }
   transition: all 0.2s ease;
+`;
+const SMALL_DESKTOP = styled.small`
+  display: none;
+  @media ${device.tablet_min} {
+    display: flex;
+  }
+`;
+const SMALL_MOBILE = styled.small`
+  display: none;
+  @media ${device.tablet} {
+    padding: 2vh 2vh;
+    height: auto;
+    display: flex;
+  }
 `;

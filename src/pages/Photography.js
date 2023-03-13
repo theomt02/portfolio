@@ -8,7 +8,7 @@ function importAll(r) {
   return r.keys().map(r);
 }
 const imagesRaw = importAll(
-  require.context("../img/photography/", false, /\.(JPG|jpg)$/)
+  require.context("../img/photography-compressed/", false, /\.(JPG|jpg)$/)
 );
 const dateLine = (f) => {
   let a = f.substring(0, 8);
@@ -23,10 +23,8 @@ const Photography = () => {
 
   useEffect(() => {
     return scrollYProgress.onChange(() => {
-      console.log(scrollYProgress);
       if (scrollYProgress.current > 0.05) {
         setVisible(true);
-        console.log(scrollYProgress);
       } else setVisible(false);
     });
   }, [scrollYProgress]);
@@ -70,6 +68,7 @@ const Photography = () => {
                       src={img.src}
                       alt={img.date}
                       key={`${img.date}${img.file}`}
+                      effect="blur"
                     />
                   );
                 })}

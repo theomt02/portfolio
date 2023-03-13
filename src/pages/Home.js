@@ -5,6 +5,7 @@ import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { Page, ContentWrapper } from "../style/Defaults";
 import { motion } from "framer-motion";
+import { device } from "../style/Defaults";
 // Components
 import Overlay from "../components/Overlay";
 import { useTheme } from "styled-components";
@@ -35,11 +36,11 @@ const Home = () => {
     },
     visible: {
       color: theme.text,
+      textShadow: "4px 4px 1px #ff0000",
       transition: {
         duration: initialLoadTransition.duration,
         delay: initialLoadDelay,
       },
-      textShadow: "4px 4px 1px #ff0000",
     },
   };
   const whileLinkHover = {
@@ -159,13 +160,24 @@ const UL = styled(motion.ul)`
   width: 100%;
   list-style: square;
   margin: var(--space-small) 0 0 var(--space-xsmall);
+  @media ${device.tablet} {
+    display: flex;
+    flex-direction: column;
+  }
 `;
 
 const MainH1 = styled(motion.h1)`
   cursor: default;
   position: relative;
-  font-size: 14vh;
+  font-size: 8rem;
   z-index: 2;
+  @media ${device.laptopL} {
+    font-size: 7vw;
+  }
+  @media ${device.tablet} {
+    font-size: 15vw;
+    width: 100%;
+  }
 `;
 const SPACE = styled.div`
   height: 100vh;

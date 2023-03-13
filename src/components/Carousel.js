@@ -3,7 +3,6 @@ import { motion, AnimatePresence } from "framer-motion";
 import { wrap } from "popmotion";
 import { projects as images } from "../data";
 import styled from "styled-components";
-import { useNavigate } from "react-router-dom";
 
 const variants = {
   enter: (direction) => {
@@ -89,7 +88,7 @@ export const Carousel = () => {
 const NEXT = styled.div`
   top: calc(50% - 20px);
   position: absolute;
-  background: white;
+  background: ${({ theme }) => theme.primary};
   border-radius: 30px;
   width: 40px;
   height: 40px;
@@ -99,14 +98,14 @@ const NEXT = styled.div`
   user-select: none;
   cursor: pointer;
   font-weight: bold;
-  font-size: 18px;
+  font-size: 2rem;
   z-index: 2;
   right: 10px;
 `;
 const PREV = styled.div`
   top: calc(50% - 20px);
   position: absolute;
-  background: white;
+  background: ${({ theme }) => theme.primary};
   border-radius: 30px;
   width: 40px;
   height: 40px;
@@ -116,7 +115,7 @@ const PREV = styled.div`
   user-select: none;
   cursor: pointer;
   font-weight: bold;
-  font-size: 18px;
+  font-size: 2rem;
   z-index: 2;
   left: 10px;
   transform: scale(-1);

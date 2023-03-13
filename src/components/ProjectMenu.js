@@ -3,13 +3,14 @@ import React from "react";
 import styled, { keyframes } from "styled-components";
 import { motion } from "framer-motion";
 import { Carousel } from "./Carousel";
+import { device } from "../style/Defaults";
 // Components
 // import { projects } from "../data";
 
 const ProjectMenu = () => {
   return (
     <PROJECT_MENU>
-      <CAROUSEL_WINDOW carousel="carousel">
+      <CAROUSEL_WINDOW>
         <Carousel />
         <span className="material-symbols-outlined cloud">cloud</span>
         <span className="material-symbols-outlined cloud c2">cloud</span>
@@ -34,6 +35,9 @@ const PROJECT_MENU = styled(motion.div)`
   width: 100%;
   display: flex;
   justify-content: center;
+  @media ${device.tablet} {
+    width: 100vw;
+  }
 `;
 const CAROUSEL_WINDOW = styled(motion.div)`
   position: relative;
@@ -42,6 +46,10 @@ const CAROUSEL_WINDOW = styled(motion.div)`
   height: 25vw;
   background: #48a7cc;
   box-shadow: 0 0 0 10px #301e06;
+  @media ${device.tablet} {
+    width: 100%;
+    height: 50vh;
+  }
   /* Cloud */
   .cloud {
     position: absolute;
@@ -60,27 +68,3 @@ const CAROUSEL_WINDOW = styled(motion.div)`
     animation-duration: 26s;
   }
 `;
-
-// const LIST = styled(motion.ul)`
-//   display: flex;
-//   list-style: none;
-//   width: 100%;
-//   justify-content: space-evenly;
-//   align-items: center;
-//   height: 100%;
-// `;
-// const LIST_ITEM = styled(motion.li)`
-//   display: flex;
-//   justify-content: center;
-//   align-items: center;
-//   flex-direction: column;
-//   img {
-//     max-height: 40vh;
-//   }
-// `;
-// const PROJECT_BUTTON = styled(motion.div)`
-//   padding: 1rem;
-//   border-radius: 0.5rem;
-//   background: ${({ theme }) => theme.text};
-//   color: ${({ theme }) => theme.primary};
-// `;
