@@ -13,7 +13,9 @@ const imagesRaw = importAll(
 const dateLine = (f) => {
   let a = f.substring(0, 8);
   let b = `${a.slice(0, 2)}/${a.slice(2, 4)}/${a.slice(4, 8)}`;
-  return b;
+  let c = a.slice(2, 4);
+  let d = a.slice(4, 8);
+  return { fullDate: b, month: c, year: d };
 };
 
 const Photography = () => {
@@ -30,22 +32,70 @@ const Photography = () => {
   }, [scrollYProgress]);
 
   useEffect(() => {
+    // Divide array into 3 function
+    function chunk(arr, len) {
+      var chunks = [],
+        i = 0,
+        n = arr.length;
+
+      while (i < n) {
+        chunks.push(arr.slice(i, (i += len)));
+      }
+
+      return chunks;
+    }
+
     let imagesPre = imagesRaw.map((img) => {
       let filename = img.substring(14, 30);
       let date = dateLine(filename);
       let file = filename.substring(12, 16);
-      return { src: img, date: date, file: file };
+      return {
+        src: img,
+        date: date.fullDate,
+        file: file,
+        month: date.month,
+        year: date.year,
+      };
     });
-    const imageParts = (chunkSize, array) => {
-      let arr = [];
-      for (let i = 0; i < array.length; i += chunkSize) {
-        const chunk = array.slice(i, i + chunkSize);
-        arr.push(chunk);
-      }
-      return arr;
-    };
-    let imageList = imageParts(imagesPre.length / 3, imagesPre);
-    setImages(imageList);
+
+    // GROUP BY DATE //
+    const imagesGrouped = imagesPre.reduce((res, obj) => {
+      let [, month, year] = obj.date.split("/");
+      let monthYear = `${month}/${year}`;
+      if (res[monthYear]) res[monthYear].push(obj);
+      else res[monthYear] = [obj];
+      return res;
+    }, {});
+
+    // SPLIT GROUPS INTO THREE PARTS //
+    let imagesGroupedSplit = [];
+    for (let key in imagesGrouped) {
+      let chunked = chunk(imagesGrouped[key], imagesGrouped[key].length / 3);
+      imagesGroupedSplit.push(chunked);
+    }
+
+    let finalCols = [[], [], []];
+    imagesGroupedSplit.forEach((group) => {
+      finalCols[0].push(...group[0]);
+      finalCols[1].push(...group[1]);
+      finalCols[2].push(...group[2]);
+    });
+    console.log(finalCols);
+
+    // sort finalCOls //
+    finalCols.forEach((col) => {
+      col.sort((a, b) => {
+        if (a.year > b.year) return -1;
+        else if (a.year === b.year) {
+          if (a.month > b.month) return -1;
+          else if (a.month < b.month) return 1;
+          else return 0;
+        } else return 1;
+      });
+    });
+
+    // console.log(finalCols);
+    setImages(finalCols);
   }, []);
 
   const goToTop = () => {
