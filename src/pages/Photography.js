@@ -3,12 +3,18 @@ import { useEffect, useState } from "react";
 import styled from "styled-components";
 import { useScroll } from "framer-motion";
 import { LazyLoadImage } from "react-lazy-load-image-component";
+// FA
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faXmark } from "@fortawesome/free-solid-svg-icons";
 
 function importAll(r) {
   return r.keys().map(r);
 }
 const imagesRaw = importAll(
   require.context("../img/photography-compressed/", false, /\.(JPG|jpg)$/)
+);
+const imagesFullRaw = importAll(
+  require.context("../img/photography/", false, /\.(JPG|jpg)$/)
 );
 const dateLine = (f) => {
   let a = f.substring(0, 8);
@@ -21,6 +27,8 @@ const dateLine = (f) => {
 const Photography = () => {
   const [images, setImages] = useState();
   const [visible, setVisible] = useState(false);
+  const [imageModal, setImageModal] = useState({});
+  const [scrollStatus, setScrollStatus] = useState(true);
   const { scrollYProgress } = useScroll();
 
   useEffect(() => {
@@ -31,6 +39,16 @@ const Photography = () => {
     });
   }, [scrollYProgress]);
 
+  // Set scroll status on modal open
+  useEffect(() => {
+    if (scrollStatus === false) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "auto";
+    }
+  }, [scrollStatus]);
+
+  // useEffect for loading and displaying image gallery
   useEffect(() => {
     // Divide array into 3 function
     function chunk(arr, len) {
@@ -80,7 +98,6 @@ const Photography = () => {
       finalCols[1].push(...group[1]);
       finalCols[2].push(...group[2]);
     });
-    console.log(finalCols);
 
     // sort finalCOls //
     finalCols.forEach((col) => {
@@ -98,16 +115,53 @@ const Photography = () => {
     setImages(finalCols);
   }, []);
 
+  // function for displaying full sized image on click
+  // on click, set state to image details (source, date)
+  // On click X clear state
+  const setModal = (img) => {
+    let imgName = img.src.substring(14, 30);
+    let src = imagesFullRaw.filter((s) => s.includes(imgName));
+    let date = dateLine(imgName);
+    let imgFull = {
+      src: src,
+      date: date.fullDate,
+    };
+    setImageModal(imgFull);
+    setScrollStatus(false);
+  };
+
+  const closeModal = () => {
+    setImageModal({});
+    setScrollStatus(true);
+  };
+
   const goToTop = () => {
-    window.scrollTo({
+    window.scroll({
       top: 0,
-      behaviour: "smooth",
+      left: 0,
+      behavior: "smooth",
     });
   };
 
   return (
     <>
       <PAGE>
+        {Object.keys(imageModal).length > 0 && (
+          <>
+            <BLUR />
+            <MODAL>
+              <IMAGE_CONTAINER>
+                <ICON_BACKGROUND />
+                <FontAwesomeIcon
+                  icon={faXmark}
+                  size="xl"
+                  onClick={closeModal}
+                />
+                <img src={imageModal.src} alt={imageModal.date} />
+              </IMAGE_CONTAINER>
+            </MODAL>
+          </>
+        )}
         {images &&
           images.map((col, i) => {
             return (
@@ -119,6 +173,7 @@ const Photography = () => {
                       alt={img.date}
                       key={`${img.date}${img.file}`}
                       effect="blur"
+                      onClick={() => setModal(img)}
                     />
                   );
                 })}
@@ -126,7 +181,10 @@ const Photography = () => {
             );
           })}
       </PAGE>
-      <BackToTop visible={visible} onClick={goToTop} />
+      <BackToTop
+        visible={visible && Object.keys(imageModal).length === 0}
+        onClick={goToTop}
+      />
     </>
   );
 };
@@ -142,17 +200,22 @@ const PAGE = styled.div`
   width: 100vw;
   display: flex;
   flex-wrap: wrap;
-  img {
-    width: 100%;
-    padding: 0;
-    margin-bottom: 4.5vw;
-  }
 `;
 
 const COL = styled.div`
   width: 26vw;
   display: flex;
   flex-direction: column;
+  img {
+    width: 100%;
+    padding: 0;
+    margin-bottom: 4.5vw;
+    transition: all 0.16s ease;
+    cursor: pointer;
+    &:hover {
+      transform: scale(1.03);
+    }
+  }
 `;
 
 const BackToTop = styled.button`
@@ -188,4 +251,61 @@ const BackToTop = styled.button`
   :active {
     background-color: #555;
   }
+`;
+
+const MODAL = styled.div`
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 2;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  img {
+    max-height: 90vh;
+    max-width: 90vw;
+    margin: 0;
+  }
+  /* Xmark */
+  svg {
+    z-index: 4;
+    position: absolute;
+    top: 3px;
+    right: 8px;
+    color: black;
+    cursor: pointer;
+  }
+`;
+const ICON_BACKGROUND = styled.div`
+  z-index: 3;
+  position: absolute;
+  top: 0;
+  right: 0;
+  background-color: white;
+  width: 34px;
+  height: 34px;
+  border-bottom-left-radius: 10px;
+  opacity: 80%;
+  cursor: pointer;
+`;
+
+const IMAGE_CONTAINER = styled.div`
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;
+
+const BLUR = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(15px);
+  z-index: 1;
+  pointer-events: none;
 `;
