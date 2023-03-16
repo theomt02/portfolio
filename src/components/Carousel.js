@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { wrap } from "popmotion";
 import { projects as images } from "../data";
 import styled from "styled-components";
+import { device } from "../style/Defaults";
 
 const variants = {
   enter: (direction) => {
@@ -79,16 +80,43 @@ export const Carousel = () => {
           }}
         />
       </AnimatePresence>
-      <NEXT onClick={() => paginate(1)}>{"‣"}</NEXT>
-      <PREV onClick={() => paginate(-1)}>{"‣"}</PREV>
+      <NEXT_CONTAINER>
+        <MOBILE_NEXT onClick={() => paginate(1)} />
+        <NEXT onClick={() => paginate(1)}>{"‣"}</NEXT>
+      </NEXT_CONTAINER>
+      <PREV_CONTAINER>
+        <MOBILE_PREV onClick={() => paginate(-1)} />
+        <PREV onClick={() => paginate(-1)}>{"‣"}</PREV>
+      </PREV_CONTAINER>
     </>
   );
 };
 
+const NEXT_CONTAINER = styled.div`
+  position: absolute;
+  right: 0;
+  height: 100%;
+  width: 15%;
+  @media ${device.tablet} {
+    cursor: pointer;
+  }
+`;
+const PREV_CONTAINER = styled.div`
+  position: absolute;
+  left: 0;
+  height: 100%;
+  width: 15%;
+  cursor: pointer;
+  @media ${device.tablet} {
+    cursor: pointer;
+  }
+`;
+
 const NEXT = styled.div`
   top: calc(50% - 20px);
   position: absolute;
-  background: ${({ theme }) => theme.primary};
+  background: #e2e2e2;
+  color: #131313;
   border-radius: 30px;
   width: 40px;
   height: 40px;
@@ -100,12 +128,14 @@ const NEXT = styled.div`
   font-weight: bold;
   font-size: 2rem;
   z-index: 2;
-  right: 10px;
+  right: 50%;
+  transform: translateX(50%);
 `;
 const PREV = styled.div`
   top: calc(50% - 20px);
   position: absolute;
-  background: ${({ theme }) => theme.primary};
+  background: #e2e2e2;
+  color: #131313;
   border-radius: 30px;
   width: 40px;
   height: 40px;
@@ -117,8 +147,35 @@ const PREV = styled.div`
   font-weight: bold;
   font-size: 2rem;
   z-index: 2;
-  left: 10px;
-  transform: scale(-1);
+  left: 50%;
+  transform: translateX(-50%) scale(-1);
+`;
+
+const MOBILE_NEXT = styled.div`
+  position: absolute;
+  right: 0;
+  background-color: white;
+  opacity: 0.2;
+  height: 100%;
+  width: 100%;
+  cursor: pointer;
+  display: none;
+  @media ${device.tablet} {
+    display: block;
+  }
+`;
+const MOBILE_PREV = styled.div`
+  position: absolute;
+  left: 0;
+  background-color: white;
+  opacity: 0.2;
+  height: 100%;
+  width: 100%;
+  cursor: pointer;
+  display: none;
+  @media ${device.tablet} {
+    display: block;
+  }
 `;
 
 const IMG = styled(motion.img)`

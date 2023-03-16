@@ -30,14 +30,24 @@ export const device = {
 export const Page = styled.div`
   display: flex;
   align-items: flex-start;
-  justify-content: center;
-  padding: 8vw 24vw 6vw;
+  justify-content: flex-start;
+  padding: 0 24vw;
+  margin-top: 8vh;
   flex: 1 1;
   flex-direction: column;
-  width: 100%;
-  height: 100vh;
+  width: 100vw;
+  max-width: 100%;
+  height: 82vh;
+  @media ${device.laptopL} {
+    padding: 0 18vh;
+    height: auto;
+  }
+  @media ${device.laptop} {
+    padding: 0 12vh;
+    height: auto;
+  }
   @media ${device.tablet} {
-    padding: 2vh 3vh;
+    padding: 2vw 3vw;
     height: auto;
   }
 `;

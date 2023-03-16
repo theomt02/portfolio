@@ -16,7 +16,6 @@ export const GlobalStyles = createGlobalStyle`
 
     font-family: 'Averia Serif Libre', cursive;
     font-weight: 400;
-    /* overflow-x: hidden; */
   }
   small {
     display: flex;

@@ -19,7 +19,6 @@ const Home = () => {
   const [initialLoadDelay, setInitialLoadDelay] = useState(
     initialLoadTransition.delay
   );
-  const [spannedIsVisible, setSpannedIsVisible] = useState(true);
 
   useEffect(() => {
     if (initialLoadDelay === initialLoadTransition.delay) {
@@ -47,14 +46,6 @@ const Home = () => {
     scale: 1.08,
     transition: {
       duration: 0.1,
-      ease: "easeIn",
-    },
-  };
-
-  const whileSpannedVisible = {
-    scale: 1.14,
-    transition: {
-      duration: 0.2,
       ease: "easeIn",
     },
   };
@@ -88,51 +79,37 @@ const Home = () => {
           animate="visible"
           variants={mainH1Variants}
         >
-          <Spanned
-            height={-20}
-            duration={0.3}
-            isVisible={spannedIsVisible}
-          ></Spanned>
+          <Spanned height={-20} duration={0.3}></Spanned>
         </MainH1>
 
         <ContentWrapper>
           <Section>
             <UL variants={ULVariants} initial="hidden" animate="show">
-              <motion.li variants={listVariants}>
+              {/* <motion.li variants={listVariants}>
                 <Link to="about">
                   <motion.h3 whileHover={whileLinkHover}>About</motion.h3>
                 </Link>
-              </motion.li>
+              </motion.li> */}
               <motion.li variants={listVariants}>
-                <ProjectsLinkContainer
-                  active={spannedIsVisible.toString()}
-                  onClick={() => setSpannedIsVisible(!spannedIsVisible)}
-                  initial={{ scale: 1 }}
-                  animate={spannedIsVisible ? { scale: 1 } : { scale: 1.12 }}
-                  whileHover={
-                    spannedIsVisible ? whileLinkHover : whileSpannedVisible
-                  }
-                >
-                  <ProjectsLink>Projects</ProjectsLink>
-                  {spannedIsVisible ? null : <LINK_BACKGROUND />}
-                </ProjectsLinkContainer>
+                <Link to="projects">
+                  <motion.h3 whileHover={whileLinkHover}>Projects</motion.h3>
+                </Link>
               </motion.li>
               <motion.li variants={listVariants}>
                 <Link to="photography">
                   <motion.h3 whileHover={whileLinkHover}>Photography</motion.h3>
                 </Link>
               </motion.li>
-              <motion.li variants={listVariants}>
+              {/* <motion.li variants={listVariants}>
                 <Link to="contact">
                   <motion.h3 whileHover={whileLinkHover}>Contact</motion.h3>
                 </Link>
-              </motion.li>
+              </motion.li> */}
             </UL>
           </Section>
           {/* <TestCanvas /> */}
         </ContentWrapper>
       </Page>
-      <SPACE />
     </>
   );
 };
@@ -146,20 +123,30 @@ const Section = styled.section`
     display: flex;
     width: 100%;
     justify-content: space-between;
+    margin: none;
   }
   li {
     display: inline-block;
     h3 {
-      font-size: 2.2rem;
+      font-size: 3vw;
       text-decoration: underline;
       cursor: pointer;
+      @media ${device.laptopL} {
+        font-size: 4vw;
+      }
+      @media ${device.laptop} {
+        font-size: 5vw;
+      }
+      @media ${device.tablet} {
+        font-size: 8vw;
+      }
     }
   }
 `;
 const UL = styled(motion.ul)`
   width: 100%;
   list-style: square;
-  margin: var(--space-small) 0 0 var(--space-xsmall);
+  /* margin: var(--space-small) 0 0 var(--space-xsmall); */
   @media ${device.tablet} {
     display: flex;
     flex-direction: column;
@@ -169,35 +156,21 @@ const UL = styled(motion.ul)`
 const MainH1 = styled(motion.h1)`
   cursor: default;
   position: relative;
-  font-size: 8rem;
+  font-size: 8vw;
   z-index: 2;
+  margin-left: auto;
+  margin-right: auto;
+  width: 100%;
   @media ${device.laptopL} {
-    font-size: 7vw;
+    font-size: 8vw;
+  }
+  @media ${device.laptop} {
+    font-size: 10vw;
   }
   @media ${device.tablet} {
     font-size: 15vw;
-    width: 100%;
   }
-`;
-const SPACE = styled.div`
-  height: 100vh;
-`;
-const ProjectsLink = styled(motion.h3)`
-  position: relative;
-  z-index: 2;
-`;
-const LINK_BACKGROUND = styled(motion.span)`
-  position: absolute;
-  top: -12.5%;
-  left: -25%;
-  width: 150%;
-  height: 130%;
-  border-radius: 15px;
-  background: red;
-  z-index: 0;
-  display: block;
-`;
-
-const ProjectsLinkContainer = styled(motion.div)`
-  position: relative;
+  @media (max-width: 460px) {
+    font-size: 13vw;
+  }
 `;

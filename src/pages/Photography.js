@@ -1,9 +1,15 @@
+// TO DO:
+
+// About section at the top; camera details, short bio, etc
+
 import React from "react";
 import { useEffect, useState } from "react";
-import styled from "styled-components";
-import { useScroll } from "framer-motion";
 import { LazyLoadImage } from "react-lazy-load-image-component";
-// FA
+// STYLE
+import styled from "styled-components";
+// Framer motion
+import { AnimatePresence, motion, useScroll } from "framer-motion";
+// FontAwesome
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faXmark } from "@fortawesome/free-solid-svg-icons";
 
@@ -29,6 +35,7 @@ const Photography = () => {
   const [visible, setVisible] = useState(false);
   const [imageModal, setImageModal] = useState({});
   const [scrollStatus, setScrollStatus] = useState(true);
+  const [imageLoading, setImageLoading] = useState(true);
   const { scrollYProgress } = useScroll();
 
   useEffect(() => {
@@ -119,6 +126,7 @@ const Photography = () => {
   // on click, set state to image details (source, date)
   // On click X clear state
   const setModal = (img) => {
+    setImageLoading(true);
     let imgName = img.src.substring(14, 30);
     let src = imagesFullRaw.filter((s) => s.includes(imgName));
     let date = dateLine(imgName);
@@ -143,40 +151,66 @@ const Photography = () => {
     });
   };
 
+  const imageLoaded = () => {
+    setImageLoading(false);
+  };
+
   return (
     <>
       <PAGE>
-        {Object.keys(imageModal).length > 0 && (
-          <>
-            <BLUR />
-            <MODAL>
-              <IMAGE_CONTAINER>
-                <ICON_BACKGROUND />
-                <FontAwesomeIcon
-                  icon={faXmark}
-                  size="xl"
-                  onClick={closeModal}
-                />
-                <img src={imageModal.src} alt={imageModal.date} />
-              </IMAGE_CONTAINER>
-            </MODAL>
-          </>
-        )}
+        <AnimatePresence>
+          {Object.keys(imageModal).length > 0 && (
+            <>
+              <BLUR />
+              <MODAL>
+                <IMAGE_CONTAINER>
+                  <ICON_BACKGROUND onClick={closeModal} />
+                  <FontAwesomeIcon
+                    icon={faXmark}
+                    size="xl"
+                    onClick={closeModal}
+                  />
+                  <motion.img
+                    src={imageModal.src}
+                    alt={imageModal.date}
+                    animate={{ opacity: imageLoading ? 0 : 1 }}
+                    transition={{ duration: 0.2, ease: "easeIn" }}
+                    exit={{
+                      opacity: 0,
+                      scale: 0.9,
+                      transition: { duration: 0.2 },
+                    }}
+                    initial={{ opacity: 0 }}
+                    onLoad={imageLoaded}
+                  />
+                </IMAGE_CONTAINER>
+              </MODAL>
+            </>
+          )}
+        </AnimatePresence>
         {images &&
           images.map((col, i) => {
             return (
               <COL key={i}>
                 {col.map((img) => {
                   return (
-                    <LazyLoadImage
-                      src={img.src}
-                      alt={img.date}
+                    <motion.div
+                      initial={{ opacity: 0 }}
+                      whileInView={{ opacity: 1 }}
+                      viewport={{ amount: 0.2 }}
                       key={`${img.date}${img.file}`}
-                      effect="blur"
-                      onClick={() => setModal(img)}
-                    />
+                    >
+                      <LazyLoadImage
+                        src={img.src}
+                        alt={img.date}
+                        key={`${img.date}${img.file}`}
+                        effect="blur"
+                        onClick={() => setModal(img)}
+                      />
+                    </motion.div>
                   );
                 })}
+                )
               </COL>
             );
           })}
@@ -259,7 +293,7 @@ const MODAL = styled.div`
   top: 0;
   width: 100vw;
   height: 100vh;
-  z-index: 2;
+  z-index: 10;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -283,11 +317,10 @@ const ICON_BACKGROUND = styled.div`
   position: absolute;
   top: 0;
   right: 0;
-  background-color: white;
+  background-color: rgba(255, 255, 255, 0.5);
   width: 34px;
   height: 34px;
-  border-bottom-left-radius: 10px;
-  opacity: 80%;
+  border-bottom-left-radius: 75%;
   cursor: pointer;
 `;
 
@@ -306,6 +339,6 @@ const BLUR = styled.div`
   height: 100vh;
   background-color: rgba(0, 0, 0, 0.7);
   backdrop-filter: blur(15px);
-  z-index: 1;
+  z-index: 9;
   pointer-events: none;
 `;

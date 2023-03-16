@@ -1,5 +1,5 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 // Style
 import styled from "styled-components";
 import { light, dark } from "../style/Theme";
@@ -13,8 +13,10 @@ const Header = ({
   setCurrentTheme,
   currentTheme,
   setCurrentDate,
-  currentDate,
+  setHeaderVisible,
+  headerVisible,
 }) => {
+  const navigate = useLocation();
   const handleDarkMode = () => {
     if (currentTheme.name === "light") {
       setCurrentTheme({ name: "dark", color: dark });
@@ -41,12 +43,17 @@ const Header = ({
 
   const headerVariants = {
     show: {
+      opacity: 1,
       transition: {
         ease: "easeIn",
         duration: 0.3,
+        delay: 1.5,
         staggerChildren: 0.05,
         delayChildren: 1.5,
       },
+    },
+    hidden: {
+      opacity: 0,
     },
   };
 
@@ -59,45 +66,55 @@ const Header = ({
     },
   };
 
+  const toggleVisible = () => {
+    if (navigate.pathname !== "/") {
+      setHeaderVisible(false);
+    }
+  };
+
   return (
-    <HEADER variants={headerVariants} animate="show" initial="hidden">
-      <FLEX variants={flexVariants}>
-        <SMALL_DESKTOP>
-          <Clock
-            format="ddd HH:mm"
-            timezone={"Pacific/Auckland"}
-            ticking={true}
-            filter={(date) => `${date}, Wellington`}
-            onChange={(date) => {
-              dateFormat(date);
-            }}
-          />
-        </SMALL_DESKTOP>
-        <SMALL_MOBILE>
-          <Clock
-            format="ddd HH:mm"
-            timezone={"Pacific/Auckland"}
-            ticking={true}
-            onChange={(date) => {
-              dateFormat(date);
-            }}
-          />
-        </SMALL_MOBILE>
-      </FLEX>
-      <LOGO variants={flexVariants}>
-        <LinkNoUL to="/">
-          <h1>TMT</h1>
-        </LinkNoUL>
-      </LOGO>
-      <FLEX variants={flexVariants}>
-        <ThemeToggle
-          onClick={handleDarkMode}
-          id="toggle"
-          className="toggle"
-          type="checkbox"
-        ></ThemeToggle>
-      </FLEX>
-    </HEADER>
+    <>
+      {headerVisible && (
+        <HEADER variants={headerVariants} animate="show" initial="hidden">
+          <FLEX variants={flexVariants}>
+            <SMALL_DESKTOP>
+              <Clock
+                format="ddd HH:mm"
+                timezone={"Pacific/Auckland"}
+                ticking={true}
+                filter={(date) => `${date}, Wellington`}
+                onChange={(date) => {
+                  dateFormat(date);
+                }}
+              />
+            </SMALL_DESKTOP>
+            <SMALL_MOBILE>
+              <Clock
+                format="ddd HH:mm"
+                timezone={"Pacific/Auckland"}
+                ticking={true}
+                onChange={(date) => {
+                  dateFormat(date);
+                }}
+              />
+            </SMALL_MOBILE>
+          </FLEX>
+          <LOGO variants={flexVariants} onClick={toggleVisible}>
+            <LinkNoUL to="/">
+              <h1>TMT</h1>
+            </LinkNoUL>
+          </LOGO>
+          <FLEX variants={flexVariants}>
+            <ThemeToggle
+              onClick={handleDarkMode}
+              id="toggle"
+              className="toggle"
+              type="checkbox"
+            ></ThemeToggle>
+          </FLEX>
+        </HEADER>
+      )}
+    </>
   );
 };
 
@@ -112,15 +129,34 @@ const LOGO = styled(motion.div)`
   position: absolute;
   left: 50%;
   transform: translateX(-50%);
+  font-size: 1.5vw;
+  @media ${device.laptopL} {
+    font-size: 2vmax;
+  }
 `;
 const HEADER = styled(motion.header)`
-  position: relative;
-  width: 100%;
+  position: sticky;
+  top: 0;
+  z-index: 5;
+  background-color: ${({ theme }) => theme.primary};
+  transition: background 500ms;
+  width: 100vw;
+  max-width: 100%;
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 1vw 24vw;
-  margin: 0 0;
+  margin: 0;
+  height: 10vh;
+  time {
+    font-size: 1.4vw;
+    @media ${device.laptopL} {
+      font-size: 1.5vmax;
+    }
+    @media ${device.laptop} {
+      font-size: 1.7vmax;
+    }
+  }
   @media ${device.tablet} {
     padding: 2vh 2vh;
   }
@@ -144,19 +180,19 @@ const LinkNoUL = styled(Link)`
   text-decoration: none;
   :hover {
     color: transparent;
-    text-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+    text-shadow: 0 0 5px ${({ theme }) => theme.textShadow};
   }
   transition: all 0.2s ease;
 `;
 const SMALL_DESKTOP = styled.small`
   display: none;
-  @media ${device.tablet_min} {
+  @media ${device.laptop_min} {
     display: flex;
   }
 `;
 const SMALL_MOBILE = styled.small`
   display: none;
-  @media ${device.tablet} {
+  @media ${device.laptop} {
     padding: 2vh 2vh;
     height: auto;
     display: flex;
