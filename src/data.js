@@ -19,6 +19,6 @@ export const projects = [
     desktop: logbook_desktop,
     mobile: logbook_mobile,
     icon: logbook_icon,
-    url: "https://theomt-logbook.vercel.app",
+    url: "https://logbook.theodoremt.com",
   },
 ];
