@@ -1,3 +1,8 @@
+// TO DO:
+//
+// cute animation of cat cutting hole in wall then saying hi lol
+//
+//
 import React, { useState, useEffect } from "react";
 // Router
 import { Link } from "react-router-dom";

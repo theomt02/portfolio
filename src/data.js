@@ -11,7 +11,7 @@ export const projects = [
     desktop: birdle_desktop,
     mobile: birdle_mobile,
     icon: birdle_icon,
-    url: "https://birdleapp.netlify.app",
+    url: "https://birdle.theodoremt.com",
   },
   {
     name: "Logbook",

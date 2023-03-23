@@ -6,10 +6,12 @@ import Contact from "../pages/Contact";
 import About from "../pages/About";
 import Projects from "../pages/Projects";
 import Photography from "../pages/Photography";
+import NotFound from "../pages/NotFound";
 
 const AnimatedRoutes = () => {
   return (
     <Routes>
+      <Route path="*" element={<NotFound />} />
       <Route path="/" element={<Home />} />
       <Route path="about" element={<About />} />
       <Route path="projects" element={<Projects />} />
