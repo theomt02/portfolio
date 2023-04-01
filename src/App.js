@@ -19,8 +19,21 @@ function App() {
     name: "light",
     color: loadedTheme.light,
   });
+  const [counter, setCounter] = useState(2);
   const [currentDate, setCurrentDate] = useState(null);
   const [headerVisible, setHeaderVisible] = useState(false);
+
+  useEffect(() => {
+    let random = Math.floor(Math.random() * themes.length);
+    setLoadedTheme(themes[random].theme);
+    setCounter(random + 1);
+  }, []);
+
+  useEffect(() => {
+    if (counter >= themes.length) {
+      setCounter(0);
+    }
+  }, [counter]);
 
   useEffect(() => {
     if (currentTheme.name === "light") {
@@ -57,6 +70,8 @@ function App() {
           headerVisible={headerVisible}
           loadedTheme={loadedTheme}
           setLoadedTheme={setLoadedTheme}
+          counter={counter}
+          setCounter={setCounter}
         />
         <AnimatedRoutes />
         {/* <Footer /> */}

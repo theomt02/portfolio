@@ -25,6 +25,7 @@ const Home = () => {
     initialLoadTransition.delay
   );
 
+  // delay when loading homepage for sliding effect
   useEffect(() => {
     if (initialLoadDelay === initialLoadTransition.delay) {
       setTimeout(() => {

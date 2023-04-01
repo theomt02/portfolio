@@ -21,8 +21,9 @@ const Header = ({
   headerVisible,
   loadedTheme,
   setLoadedTheme,
+  counter,
+  setCounter,
 }) => {
-  const [counter, setCounter] = useState(2);
   const [showBubble, setShowBubble] = useState(false);
   const navigate = useLocation();
 
@@ -50,12 +51,7 @@ const Header = ({
 
   const handleThemeChange = () => {
     console.log("theme changed");
-    let count = counter;
-    setCounter(count + 1);
-    if (counter === themes.length - 1) {
-      setCounter(0);
-    }
-    console.log(counter);
+    setCounter(counter + 1);
     setLoadedTheme(themes[counter].theme);
   };
 
