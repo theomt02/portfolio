@@ -40,7 +40,7 @@ const Home = () => {
     },
     visible: {
       color: theme.text,
-      textShadow: "4px 4px 1px #ff0000",
+      textShadow: `4px 4px 1px ${theme.secondary}`,
       transition: {
         duration: initialLoadTransition.duration,
         delay: initialLoadDelay,

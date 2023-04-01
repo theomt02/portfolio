@@ -5,7 +5,7 @@ import { useLocation } from "react-router-dom";
 // Style
 import { GlobalStyles } from "./style/Global";
 import styled, { ThemeProvider } from "styled-components";
-import { light } from "./style/Theme";
+import { themes } from "./style/Theme";
 
 // Components
 import Header from "./components/Header";
@@ -14,12 +14,22 @@ import AnimatedRoutes from "./components/AnimatedRoutes";
 
 function App() {
   // Set default theme & init state
+  const [loadedTheme, setLoadedTheme] = useState(themes[1].theme);
   const [currentTheme, setCurrentTheme] = useState({
     name: "light",
-    color: light,
+    color: loadedTheme.light,
   });
   const [currentDate, setCurrentDate] = useState(null);
   const [headerVisible, setHeaderVisible] = useState(false);
+
+  useEffect(() => {
+    if (currentTheme.name === "light") {
+      setCurrentTheme({ name: "light", color: loadedTheme.light });
+    } else {
+      setCurrentTheme({ name: "dark", color: loadedTheme.dark });
+    }
+    // eslint-disable-next-line
+  }, [loadedTheme]);
 
   const location = useLocation();
   useEffect(() => {
@@ -45,6 +55,8 @@ function App() {
           currentDate={currentDate}
           setHeaderVisible={setHeaderVisible}
           headerVisible={headerVisible}
+          loadedTheme={loadedTheme}
+          setLoadedTheme={setLoadedTheme}
         />
         <AnimatedRoutes />
         {/* <Footer /> */}
