@@ -44,7 +44,6 @@ const H1 = styled.h1`
 `;
 const H2 = styled.h1`
   font-size: 2.5vw;
-  text-decoration: underline;
   margin-bottom: 3vh;
 `;
 const LINK = styled.h2`
