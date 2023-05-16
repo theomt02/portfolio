@@ -106,11 +106,11 @@ const Home = () => {
                   <motion.h3 whileHover={whileLinkHover}>Photography</motion.h3>
                 </Link>
               </motion.li>
-              {/* <motion.li variants={listVariants}>
+              <motion.li variants={listVariants}>
                 <Link to="contact">
                   <motion.h3 whileHover={whileLinkHover}>Contact</motion.h3>
                 </Link>
-              </motion.li> */}
+              </motion.li>
             </UL>
           </Section>
           {/* <TestCanvas /> */}
