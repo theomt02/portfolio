@@ -210,7 +210,6 @@ const Photography = () => {
                     </motion.div>
                   );
                 })}
-                )
               </COL>
             );
           })}
